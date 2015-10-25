@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="shape" abstract="true">
+        <xs:sequence>
+            <xs:element type="xs:string" name="color"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="circle">
+        <xs:complexContent>
+            <xs:extension base="shape">
+                <xs:sequence>
+                    <xs:element name="diameter" type="xs:float"
+                                minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="triangle">
+        <xs:complexContent>
+            <xs:extension base="shape">
+                <xs:sequence>
+                    <xs:element name="side" type="xs:float"
+                                minOccurs="3" maxOccurs="3"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="square">
+        <xs:complexContent>
+            <xs:extension base="shape">
+                <xs:sequence>
+                    <xs:element name="side" type="xs:float"
+                                minOccurs="1" maxOccurs="1"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="rectangle">
+        <xs:complexContent>
+            <xs:extension base="shape">
+                <xs:sequence>
+                    <xs:element name="side" type="xs:float"
+                                minOccurs="2" maxOccurs="2"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="shapes">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element type="circle" name="circle"
+                            maxOccurs="unbounded"/>
+                <xs:element type="triangle" name="triangle"
+                            maxOccurs="unbounded"/>
+                <xs:element type="square" name="square"
+                            maxOccurs="unbounded"/>
+                <xs:element type="rectangle" name="rectangle"
+                            maxOccurs="unbounded"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

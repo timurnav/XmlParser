@@ -1,0 +1,43 @@
+package ru.timurnav.xmlReader;
+
+import ru.timurnav.Main;
+import ru.timurnav.model.Shape;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.StringReader;
+
+import static ru.timurnav.model.ShapeType.getClassByXml;
+
+public class XmlParser implements Runnable{
+
+    private Thread splitter;
+
+    public XmlParser(Thread thread) {
+        splitter = thread;
+    }
+
+    private Shape convertXmlToObject(String xmlData, Class<? extends Shape> clazz) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(clazz);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            return (Shape) unmarshaller.unmarshal(new StringReader(xmlData));
+        } catch (JAXBException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public void run() {
+        while (true){
+            String xmlString = Main.XML_STRING_QUEUE.poll();
+            if (xmlString != null) {
+                Shape shape = convertXmlToObject(xmlString, getClassByXml(xmlString));
+                Main.SHAPES_QUEUE.offer(shape);
+            } else if (!splitter.isAlive()) {
+                return;
+            }
+        }
+    }
+}
