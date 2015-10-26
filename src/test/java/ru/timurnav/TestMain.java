@@ -9,9 +9,7 @@ import ru.timurnav.model.shapes.Circle;
 import ru.timurnav.model.shapes.Rectangle;
 import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
-import ru.timurnav.xmlReader.Printer;
-import ru.timurnav.xmlReader.XmlParser;
-import ru.timurnav.xmlReader.XmlSplitter;
+import ru.timurnav.xmlReader.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -48,10 +46,10 @@ public class TestMain {
 
     @Test
     public void testSplitter() {
-        Assert.assertTrue(Main.XML_STRING_QUEUE.isEmpty());
+        Assert.assertTrue(ParserMain.XML_STRING_QUEUE.isEmpty());
         new XmlSplitter(new File("src\\test\\resources\\shapes1.xml")).run();
         while (EXPECTED_STRING_QUEUE.size() > 0) {
-            Assert.assertEquals(EXPECTED_STRING_QUEUE.poll(), Main.XML_STRING_QUEUE.poll());
+            Assert.assertEquals(EXPECTED_STRING_QUEUE.poll(), ParserMain.XML_STRING_QUEUE.poll());
         }
     }
 
@@ -64,24 +62,24 @@ public class TestMain {
 
     @Test
     public void testParser() {
-        Assert.assertTrue(Main.SHAPES_QUEUE.isEmpty());
+        Assert.assertTrue(ParserMain.SHAPES_QUEUE.isEmpty());
         while (EXPECTED_STRING_QUEUE.size() > 0) {
-            Main.XML_STRING_QUEUE.offer(EXPECTED_STRING_QUEUE.poll());
+            ParserMain.XML_STRING_QUEUE.offer(EXPECTED_STRING_QUEUE.poll());
         }
         Thread thread = new Thread();
         thread.setDaemon(true);
         thread.start();
         new XmlParser(thread).run();
         while (EXPECTED_SHAPE_QUEUE.size() > 0) {
-            Assert.assertEquals(EXPECTED_SHAPE_QUEUE.poll(), Main.SHAPES_QUEUE.poll());
+            Assert.assertEquals(EXPECTED_SHAPE_QUEUE.poll(), ParserMain.SHAPES_QUEUE.poll());
         }
     }
 
     @Test
     public void testPrinter() {
-        Assert.assertTrue(Main.SHAPES_QUEUE.isEmpty());
+        Assert.assertTrue(ParserMain.SHAPES_QUEUE.isEmpty());
         while (EXPECTED_SHAPE_QUEUE.size() > 0) {
-            Main.SHAPES_QUEUE.offer(EXPECTED_SHAPE_QUEUE.poll());
+            ParserMain.SHAPES_QUEUE.offer(EXPECTED_SHAPE_QUEUE.poll());
         }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream consoleStream = System.out;

@@ -1,7 +1,5 @@
 package ru.timurnav.xmlReader;
 
-import ru.timurnav.ExceptionUtils;
-import ru.timurnav.Main;
 import ru.timurnav.model.Shape;
 
 import javax.xml.bind.JAXBContext;
@@ -9,7 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
-import static ru.timurnav.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 import static ru.timurnav.model.ShapeType.getClassByXml;
 
 public class XmlParser implements Runnable{
@@ -33,11 +31,11 @@ public class XmlParser implements Runnable{
     @Override
     public void run() {
         while (true){
-            String xmlString = Main.XML_STRING_QUEUE.poll();
+            String xmlString = ParserMain.XML_STRING_QUEUE.poll();
             if (xmlString != null) {
                 Shape shape = convertXmlToObject(xmlString, getClassByXml(xmlString));
-                Main.SHAPES_QUEUE.offer(shape);
-            } else if (Main.XML_STRING_QUEUE.size() == 0 && !splitter.isAlive()) {
+                ParserMain.SHAPES_QUEUE.offer(shape);
+            } else if (ParserMain.XML_STRING_QUEUE.size() == 0 && !splitter.isAlive()) {
                 return;
             }
         }

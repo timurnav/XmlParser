@@ -1,6 +1,5 @@
 package ru.timurnav.xmlReader;
 
-import ru.timurnav.Main;
 import ru.timurnav.model.Shape;
 
 public class Printer implements Runnable {
@@ -17,10 +16,10 @@ public class Printer implements Runnable {
     @Override
     public void run() {
         while (true) {
-            Shape polledShape = Main.SHAPES_QUEUE.poll();
+            Shape polledShape = ParserMain.SHAPES_QUEUE.poll();
             if (polledShape != null) {
                 System.out.println(polledShape);
-            } else if (Main.SHAPES_QUEUE.size() == 0 && !splitter.isAlive() && !parser.isAlive()) {
+            } else if (ParserMain.SHAPES_QUEUE.size() == 0 && !splitter.isAlive() && !parser.isAlive()) {
                 return;
             }
         }

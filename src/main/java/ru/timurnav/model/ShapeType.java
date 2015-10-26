@@ -1,13 +1,13 @@
 package ru.timurnav.model;
 
-import ru.timurnav.ExceptionUtils;
+import ru.timurnav.xmlReader.ExceptionUtils;
 import ru.timurnav.model.shapes.Circle;
 import ru.timurnav.model.shapes.Rectangle;
 import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
 
-import static ru.timurnav.ExceptionUtils.ExceptionType.OPEN_TAG;
-import static ru.timurnav.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_TAG;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public enum ShapeType {
     CIRCLE("<circle>", "</circle>", Circle.class),

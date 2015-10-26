@@ -1,15 +1,13 @@
 package ru.timurnav.xmlReader;
 
-import ru.timurnav.ExceptionUtils;
-import ru.timurnav.Main;
 import ru.timurnav.model.ShapeType;
 
 import java.io.*;
 
-import static ru.timurnav.ExceptionUtils.ExceptionType.CLOSE_TAG;
-import static ru.timurnav.ExceptionUtils.ExceptionType.OPEN_TAG;
-import static ru.timurnav.ExceptionUtils.ExceptionType.CLOSE_ROOT_TAG;
-import static ru.timurnav.ExceptionUtils.ExceptionType.OPEN_ROOT_TAG;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_TAG;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_TAG;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_ROOT_TAG;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_ROOT_TAG;
 import static ru.timurnav.model.ShapeType.ROOT_SHAPE;
 import static ru.timurnav.model.ShapeType.getShapeTypeByOpenTag;
 
@@ -45,7 +43,7 @@ public class XmlSplitter implements Runnable{
                     sb.append(currentTag);
                 }
 
-                Main.XML_STRING_QUEUE.offer(sb.toString());
+                ParserMain.XML_STRING_QUEUE.offer(sb.toString());
                 currentTag = reader.readAndCheckTag(CLOSE_ROOT_TAG);
 
             } while (ROOT_SHAPE.mismatchCloseTag(currentTag));

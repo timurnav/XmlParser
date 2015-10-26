@@ -1,4 +1,4 @@
-package ru.timurnav;
+package ru.timurnav.xmlReader;
 
 public class ExceptionUtils {
 
