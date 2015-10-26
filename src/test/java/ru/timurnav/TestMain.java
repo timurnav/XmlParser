@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class TestMain {
 
-    private static final String CONSOLE_OUTPUT_MAIN =
+    private static final String EXPECTED_CONSOLE_OUTPUT_MAIN =
             "1:red - 6,51\r\n" +
                     "2:green - 321,94\r\n" +
                     "3:white - 2,58\r\n" +
@@ -91,6 +91,6 @@ public class TestMain {
         thread.start();
         new Printer(thread, thread).run();
         System.setOut(consoleStream);
-        Assert.assertEquals(outputStream.toString(), CONSOLE_OUTPUT_MAIN);
+        Assert.assertEquals(outputStream.toString(), EXPECTED_CONSOLE_OUTPUT_MAIN);
     }
 }
