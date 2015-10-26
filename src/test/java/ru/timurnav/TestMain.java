@@ -57,12 +57,9 @@ public class TestMain {
 
     @Test
     public void testSplitterFail() {
-        Assert.assertTrue(Main.XML_STRING_QUEUE.isEmpty());
-//        thrown.expect(IllegalArgumentException.class);
-//        thrown.expectMessage("Incorrect open Tag");
-//        new XmlSplitter(new File("src\\test\\resources\\shapes_err1.xml")).run();
-//        thrown = ExpectedException.none();
-        new XmlSplitter(new File("src\\test\\resources\\shapes_err2.xml")).run();
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage(ExceptionUtils.ExceptionType.OPEN_TAG.getMessage() + ExceptionUtils.getAdditionalMessage());
+        new XmlSplitter(new File("src\\test\\resources\\shapes_open_tag.xml")).run();
     }
 
     @Test
