@@ -1,5 +1,6 @@
 package ru.timurnav.xmlReader;
 
+import ru.timurnav.ExceptionUtils;
 import ru.timurnav.Main;
 import ru.timurnav.model.Shape;
 
@@ -8,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
+import static ru.timurnav.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 import static ru.timurnav.model.ShapeType.getClassByXml;
 
 public class XmlParser implements Runnable{
@@ -24,7 +26,7 @@ public class XmlParser implements Runnable{
             Unmarshaller unmarshaller = context.createUnmarshaller();
             return (Shape) unmarshaller.unmarshal(new StringReader(xmlData));
         } catch (JAXBException e) {
-            throw new IllegalArgumentException();
+            throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
         }
     }
 
@@ -35,7 +37,7 @@ public class XmlParser implements Runnable{
             if (xmlString != null) {
                 Shape shape = convertXmlToObject(xmlString, getClassByXml(xmlString));
                 Main.SHAPES_QUEUE.offer(shape);
-            } else if (!splitter.isAlive()) {
+            } else if (Main.XML_STRING_QUEUE.size() == 0 && !splitter.isAlive()) {
                 return;
             }
         }

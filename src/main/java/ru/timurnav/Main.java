@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static ru.timurnav.ExceptionUtils.ExceptionType.ARGUMENTS;
+import static ru.timurnav.ExceptionUtils.ExceptionType.XML_FILE;
+
 public class Main {
 
     public static final Queue<String> XML_STRING_QUEUE = new ConcurrentLinkedQueue<>();
@@ -17,13 +20,12 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            throw new IllegalArgumentException(
-                    "At least one argument should be transmitted!");
+            throw ExceptionUtils.getExpetionWithMessage(ARGUMENTS);
         }
         String fileName = args[0];
-        if (!fileName.endsWith(".xml"))
-            throw new IllegalArgumentException(
-                    "Please specify an *.xml file as first argument!");
+        if (!fileName.endsWith(".xml")){
+            throw ExceptionUtils.getExpetionWithMessage(XML_FILE);
+        }
         File xmlFile = new File(fileName);
         if (!xmlFile.isFile() || !xmlFile.canRead()) {
             throw new IllegalArgumentException("Can not read file");

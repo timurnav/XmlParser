@@ -16,11 +16,11 @@ public class Printer implements Runnable {
 
     @Override
     public void run() {
-        while (true){
+        while (true) {
             Shape polledShape = Main.SHAPES_QUEUE.poll();
             if (polledShape != null) {
                 System.out.println(polledShape);
-            } else if (!splitter.isAlive() && !parser.isAlive()) {
+            } else if (Main.SHAPES_QUEUE.size() == 0 && !splitter.isAlive() && !parser.isAlive()) {
                 return;
             }
         }

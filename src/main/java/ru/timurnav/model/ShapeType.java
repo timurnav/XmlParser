@@ -1,9 +1,13 @@
 package ru.timurnav.model;
 
+import ru.timurnav.ExceptionUtils;
 import ru.timurnav.model.shapes.Circle;
 import ru.timurnav.model.shapes.Rectangle;
 import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
+
+import static ru.timurnav.ExceptionUtils.ExceptionType.OPEN_TAG;
+import static ru.timurnav.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public enum ShapeType {
     CIRCLE("<circle>", "</circle>", Circle.class),
@@ -51,7 +55,8 @@ public enum ShapeType {
         if (TRIANGLE.matchOpenTag(openTag)) return TRIANGLE;
         if (RECTANGLE.matchOpenTag(openTag)) return RECTANGLE;
         if (SQUARE.matchOpenTag(openTag)) return SQUARE;
-        throw new IllegalArgumentException("Incorrect open Tag");
+        throw ExceptionUtils.getExpetionWithMessage(OPEN_TAG);
+
     }
 
     public static Class getClassByXml(String xmlString) {
@@ -59,7 +64,7 @@ public enum ShapeType {
         if (TRIANGLE.matchBothTags(xmlString)) return TRIANGLE.getShapesClass();
         if (RECTANGLE.matchBothTags(xmlString)) return RECTANGLE.getShapesClass();
         if (SQUARE.matchBothTags(xmlString)) return SQUARE.getShapesClass();
-        throw new IllegalArgumentException("Incorrect XmlString");
+        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
     }
 
 }
