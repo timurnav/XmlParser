@@ -1,13 +1,13 @@
-package ru.timurnav.xmlReader;
+package ru.timurnav.reader;
 
 import ru.timurnav.model.ShapeType;
 
 import java.io.*;
 
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_ROOT_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_ROOT_TAG;
+import static ru.timurnav.reader.ExceptionUtils.ExceptionType.CLOSE_TAG;
+import static ru.timurnav.reader.ExceptionUtils.ExceptionType.OPEN_TAG;
+import static ru.timurnav.reader.ExceptionUtils.ExceptionType.CLOSE_ROOT_TAG;
+import static ru.timurnav.reader.ExceptionUtils.ExceptionType.OPEN_ROOT_TAG;
 import static ru.timurnav.model.ShapeType.ROOT_SHAPE;
 import static ru.timurnav.model.ShapeType.getShapeTypeByOpenTag;
 

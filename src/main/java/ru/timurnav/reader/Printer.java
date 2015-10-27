@@ -1,4 +1,4 @@
-package ru.timurnav.xmlReader;
+package ru.timurnav.reader;
 
 import ru.timurnav.model.Shape;
 

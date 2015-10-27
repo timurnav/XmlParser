@@ -1,6 +1,6 @@
 package ru.timurnav;
 
-import ru.timurnav.xmlReader.ParserMain;
+import ru.timurnav.reader.ParserMain;
 
 public class PseudoMain {
     public static void main(String[] args) {

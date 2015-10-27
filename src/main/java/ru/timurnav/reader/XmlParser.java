@@ -1,4 +1,4 @@
-package ru.timurnav.xmlReader;
+package ru.timurnav.reader;
 
 import ru.timurnav.model.Shape;
 
@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+import static ru.timurnav.reader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 import static ru.timurnav.model.ShapeType.getClassByXml;
 
 public class XmlParser implements Runnable{

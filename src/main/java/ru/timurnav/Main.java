@@ -1,6 +1,6 @@
 package ru.timurnav;
 
-import ru.timurnav.xmlReader.ParserMain;
+import ru.timurnav.reader.ParserMain;
 
 public class Main {
 

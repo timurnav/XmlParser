@@ -9,7 +9,7 @@ import ru.timurnav.model.shapes.Circle;
 import ru.timurnav.model.shapes.Rectangle;
 import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
-import ru.timurnav.xmlReader.*;
+import ru.timurnav.reader.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
