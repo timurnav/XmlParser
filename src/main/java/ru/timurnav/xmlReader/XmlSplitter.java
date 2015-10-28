@@ -1,6 +1,12 @@
 package ru.timurnav.xmlReader;
 
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class XmlSplitter implements Runnable{
 
@@ -16,8 +22,27 @@ public class XmlSplitter implements Runnable{
     }
 
     public void parseXmlFile() {
+        try {
+            XMLInputFactory factory = XMLInputFactory.newInstance();
+            XMLEventReader tempReader = factory.createXMLEventReader(new FileInputStream(xmlFile));
+                    XMLEventReader reader = factory.createFilteredReader(
+                            tempReader, event -> event.getEventType() != 4);
+            try {
+                while (reader.hasNext()){
+                    XMLEvent event = reader.peek();
+//                    System.out.println(event.);
+//                    System.out.println("event: " + event);
+//                    System.out.println("type: " + event.getEventType());
+                    reader.nextEvent();
+                }
+            } finally {
+                reader.close();
+            }
+        } catch (FileNotFoundException | XMLStreamException e) {
+            throw ExceptionUtils.getExpetionWithMessage(ExceptionUtils.ExceptionType.XML_FILE);
+        }
 
-        //TODO implement this
+
        /* try (CustomTrimReader reader = new CustomTrimReader(
                 new InputStreamReader(new FileInputStream(xmlFile)))) {
 

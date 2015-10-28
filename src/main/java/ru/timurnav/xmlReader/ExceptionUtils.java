@@ -19,7 +19,7 @@ public class ExceptionUtils {
         OPEN_ROOT_TAG("Can't split xml. Incorrect root open tag."),
         CLOSE_ROOT_TAG("Can't split xml. Root close tag is missed."),
         ARGUMENTS("At least one argument should be transmitted."),
-        XML_FILE("Transmitted file isn't an *.xml file.")
+        XML_FILE("Transmitted file isn't an *.xml file or isn't able to be read.")
         ;
 
         private String message;
