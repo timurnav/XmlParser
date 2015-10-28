@@ -2,12 +2,9 @@ package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.io.StringReader;
 import java.util.Objects;
 
 @XmlType(name = "square")
@@ -25,6 +22,10 @@ public class Square extends Shape {
         Square unmarshaled = (Square) convertXmlToObject(xmlString, Square.class);
         this.color = unmarshaled.color;
         this.side= unmarshaled.side;
+    }
+
+    public Square(String xmlString) {
+        this(xmlString, sequence.incrementAndGet());
     }
 
     @Override

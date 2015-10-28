@@ -1,70 +1,39 @@
 package ru.timurnav.model;
 
 import ru.timurnav.xmlReader.ExceptionUtils;
-import ru.timurnav.model.shapes.Circle;
-import ru.timurnav.model.shapes.Rectangle;
-import ru.timurnav.model.shapes.Square;
-import ru.timurnav.model.shapes.Triangle;
+
+import java.util.Arrays;
 
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public enum ShapeType {
-    CIRCLE("<circle>", "</circle>", Circle.class),
-    TRIANGLE("<triangle>", "</triangle>", Triangle.class),
-    SQUARE("<square>", "</square>", Square.class),
-    RECTANGLE("<rectangle>", "</rectangle>", Rectangle.class),
-    ROOT_SHAPE("<shapes>", "</shapes>", Shape.class);
+    CIRCLE("circle"),
+    TRIANGLE("triangle"),
+    SQUARE("square"),
+    RECTANGLE("rectangle"),
+    ROOT_SHAPE("shapes");
 
-    private final String openTag;
-    private final String closeTag;
-    private final Class clazz;
+    private final String eventName;
 
-    ShapeType(String openTag, String closeTag, Class clazz) {
-        this.openTag = openTag;
-        this.closeTag = closeTag;
-        this.clazz = clazz;
+    ShapeType(String eventName) {
+        this.eventName = eventName;
     }
 
-    public Class getShapesClass() {
-        return clazz;
+    public boolean matchEventName(String eventName){
+        return this.eventName.equals(eventName);
     }
 
-    public String getOpenTag() {
-        return openTag;
+    public static ShapeType getShapeTypeByOpenTag(String eventName) {
+        return Arrays.asList(ShapeType.values())
+                .stream()
+                .filter(t -> t.matchEventName(eventName))
+                .findAny()
+                .orElseThrow(() -> ExceptionUtils.getExpetionWithMessage(OPEN_TAG));
     }
 
-    public String getCloseTag() {
-        return closeTag;
+    public static ShapeType getShapeTypeByXmlString(String xmlString) {
+        String tmp = xmlString.substring(xmlString.indexOf("<"), xmlString.indexOf(">"));
+        System.out.println(tmp);
+        return getShapeTypeByOpenTag(tmp);
     }
-
-    public boolean matchOpenTag(String openTag){
-        return this.openTag.equals(openTag);
-    }
-
-    public boolean mismatchCloseTag(String closeTag){
-        return !this.closeTag.equals(closeTag);
-    }
-
-    public boolean matchBothTags(String xmlString){
-        return xmlString.startsWith(openTag) && xmlString.endsWith(closeTag);
-    }
-
-    public static ShapeType getShapeTypeByOpenTag(String openTag) {
-        if (CIRCLE.matchOpenTag(openTag)) return CIRCLE;
-        if (TRIANGLE.matchOpenTag(openTag)) return TRIANGLE;
-        if (RECTANGLE.matchOpenTag(openTag)) return RECTANGLE;
-        if (SQUARE.matchOpenTag(openTag)) return SQUARE;
-        throw ExceptionUtils.getExpetionWithMessage(OPEN_TAG);
-
-    }
-
-    public static Class getClassByXml(String xmlString) {
-        if (CIRCLE.matchBothTags(xmlString)) return CIRCLE.getShapesClass();
-        if (TRIANGLE.matchBothTags(xmlString)) return TRIANGLE.getShapesClass();
-        if (RECTANGLE.matchBothTags(xmlString)) return RECTANGLE.getShapesClass();
-        if (SQUARE.matchBothTags(xmlString)) return SQUARE.getShapesClass();
-        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
-    }
-
 }

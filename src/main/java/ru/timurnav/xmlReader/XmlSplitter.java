@@ -1,15 +1,6 @@
 package ru.timurnav.xmlReader;
 
-import ru.timurnav.model.ShapeType;
-
-import java.io.*;
-
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.CLOSE_ROOT_TAG;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.OPEN_ROOT_TAG;
-import static ru.timurnav.model.ShapeType.ROOT_SHAPE;
-import static ru.timurnav.model.ShapeType.getShapeTypeByOpenTag;
+import java.io.File;
 
 public class XmlSplitter implements Runnable{
 
@@ -25,7 +16,9 @@ public class XmlSplitter implements Runnable{
     }
 
     public void parseXmlFile() {
-        try (CustomTrimReader reader = new CustomTrimReader(
+
+        //TODO implement this
+       /* try (CustomTrimReader reader = new CustomTrimReader(
                 new InputStreamReader(new FileInputStream(xmlFile)))) {
 
             if (!ROOT_SHAPE.matchOpenTag(reader.readLine())) {
@@ -50,25 +43,6 @@ public class XmlSplitter implements Runnable{
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    private static class CustomTrimReader extends BufferedReader {
-
-        public CustomTrimReader(Reader in) {
-            super(in);
-        }
-
-        public String readAndCheckTag(ExceptionUtils.ExceptionType type) throws IOException {
-            while (true) {
-                String tmp = super.readLine();
-                if (tmp == null) {
-                    throw ExceptionUtils.getExpetionWithMessage(type);
-                }
-                if (!tmp.isEmpty()){
-                    return tmp.trim();
-                }
-            }
-        }
+        }*/
     }
 }

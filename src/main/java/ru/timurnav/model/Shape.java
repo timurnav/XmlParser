@@ -6,25 +6,21 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.StringReader;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public abstract class Shape {
 
-    private final static AtomicInteger sequence = new AtomicInteger(0);
+    protected final static AtomicInteger sequence = new AtomicInteger(0);
 
     @XmlElement(name = "color")
     protected String color;
+
     protected int number;
 
-    public Shape() {
-        number = sequence.incrementAndGet();
-    }
+    public Shape() { }
 
     protected static Shape convertXmlToObject(String xmlData, Class<? extends Shape> clazz) {
         try {

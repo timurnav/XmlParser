@@ -1,14 +1,15 @@
 package ru.timurnav.xmlReader;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.model.ShapeFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
+import static ru.timurnav.model.ShapeType.getShapeTypeByXmlString;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
-import static ru.timurnav.model.ShapeType.getClassByXml;
 
 public class XmlParser implements Runnable {
 
@@ -27,8 +28,8 @@ public class XmlParser implements Runnable {
         try {
             while (true) {
                 String xmlString = ParserMain.XML_STRING_QUEUE.take();
-                Shape shape = convertXmlToObject(xmlString, getClassByXml(xmlString));
-                ParserMain.SHAPES_QUEUE.offer(shape);
+                Shape shape = ShapeFactory.getShape(getShapeTypeByXmlString(xmlString), xmlString);
+                System.out.println(shape);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
