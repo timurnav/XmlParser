@@ -5,15 +5,17 @@ import ru.timurnav.model.Shape;
 
 import java.io.File;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.ARGUMENTS;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.XML_FILE;
 
 public class ParserMain {
 
-    public static final Queue<String> XML_STRING_QUEUE = new ConcurrentLinkedQueue<>();
-    public static final Queue<Shape> SHAPES_QUEUE = new ConcurrentLinkedQueue<>();
+    public static final BlockingQueue<String> XML_STRING_QUEUE = new LinkedBlockingQueue<>();
+    public static final BlockingQueue<Shape> SHAPES_QUEUE = new LinkedBlockingQueue<>();
 
     public static void mainParserClass(String[] args) {
         if (args.length == 0) {
@@ -31,9 +33,10 @@ public class ParserMain {
         try {
             Thread splitterThread = new Thread(new XmlSplitter(xmlFile));
             splitterThread.start();
-            Thread parserThread = new Thread(new XmlParser(splitterThread));
+            Thread parserThread = new Thread(new XmlParser());
             parserThread.start();
-            Thread printerThread = new Thread((new Printer(splitterThread, parserThread)));
+            Thread printerThread = new Thread((new Printer()));
+            printerThread.setDaemon(true);
             printerThread.start();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());

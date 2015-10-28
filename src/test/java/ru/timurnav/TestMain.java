@@ -69,7 +69,7 @@ public class TestMain {
         Thread thread = new Thread();
         thread.setDaemon(true);
         thread.start();
-        new XmlParser(thread).run();
+        new XmlParser().run();
         while (EXPECTED_SHAPE_QUEUE.size() > 0) {
             Assert.assertEquals(EXPECTED_SHAPE_QUEUE.poll(), ParserMain.SHAPES_QUEUE.poll());
         }
@@ -87,7 +87,7 @@ public class TestMain {
         Thread thread = new Thread();
         thread.setDaemon(true);
         thread.start();
-        new Printer(thread, thread).run();
+        new Printer().run();
         System.setOut(consoleStream);
         Assert.assertEquals(outputStream.toString(), EXPECTED_CONSOLE_OUTPUT_MAIN);
     }

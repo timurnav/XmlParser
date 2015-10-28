@@ -10,13 +10,7 @@ import java.io.StringReader;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 import static ru.timurnav.model.ShapeType.getClassByXml;
 
-public class XmlParser implements Runnable{
-
-    private Thread splitter;
-
-    public XmlParser(Thread thread) {
-        splitter = thread;
-    }
+public class XmlParser implements Runnable {
 
     private Shape convertXmlToObject(String xmlData, Class<? extends Shape> clazz) {
         try {
@@ -30,14 +24,14 @@ public class XmlParser implements Runnable{
 
     @Override
     public void run() {
-        while (true){
-            String xmlString = ParserMain.XML_STRING_QUEUE.poll();
-            if (xmlString != null) {
+        try {
+            while (true) {
+                String xmlString = ParserMain.XML_STRING_QUEUE.take();
                 Shape shape = convertXmlToObject(xmlString, getClassByXml(xmlString));
                 ParserMain.SHAPES_QUEUE.offer(shape);
-            } else if (ParserMain.XML_STRING_QUEUE.size() == 0 && !splitter.isAlive()) {
-                return;
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
