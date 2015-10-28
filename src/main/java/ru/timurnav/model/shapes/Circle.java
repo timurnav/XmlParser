@@ -1,10 +1,15 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.StringReader;
 import java.util.Objects;
 
 @XmlType(name = "circle")
@@ -14,12 +19,14 @@ public class Circle extends Shape {
     @XmlElement(name = "diameter")
     private float diameter;
 
-    public Circle(String color, int number, float diameter) {
-        super(color, number);
-        this.diameter = diameter;
+    public Circle() {
     }
 
-    public Circle() {
+    public Circle(String xmlString, int number) {
+        super(number);
+        Circle unmarshaled = (Circle) convertXmlToObject(xmlString, Circle.class);
+        this.color = unmarshaled.color;
+        this.diameter= unmarshaled.diameter;
     }
 
     @Override
@@ -39,6 +46,6 @@ public class Circle extends Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(diameter);
+        return Objects.hash(diameter, number, color);
     }
 }

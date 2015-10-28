@@ -1,10 +1,14 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +22,11 @@ public class Triangle extends Shape {
     public Triangle() {
     }
 
-    public Triangle(String color, int number, List<Float> sides) {
-        super(color, number);
-        this.sides = sides;
+    public Triangle(String xmlString, int number) {
+        super(number);
+        Triangle unmarshaled = (Triangle) convertXmlToObject(xmlString, Triangle.class);
+        this.color = unmarshaled.color;
+        this.sides = unmarshaled.sides;
     }
 
     @Override
@@ -44,6 +50,6 @@ public class Triangle extends Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sides);
+        return Objects.hash(sides, number, color);
     }
 }

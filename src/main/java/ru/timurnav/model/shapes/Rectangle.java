@@ -1,10 +1,14 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,9 +22,11 @@ public class Rectangle extends Shape {
     public Rectangle() {
     }
 
-    public Rectangle(String color, int number, List<Float> sides) {
-        super(color, number);
-        this.sides = sides;
+    public Rectangle(String xmlString, int number) {
+        super(number);
+        Rectangle unmarshaled = (Rectangle) convertXmlToObject(xmlString, Rectangle.class);
+        this.color = unmarshaled.color;
+        this.sides = unmarshaled.sides;
     }
 
     @Override
@@ -40,6 +46,6 @@ public class Rectangle extends Shape {
 
     @Override
     public int hashCode() {
-        return Objects.hash(sides);
+        return Objects.hash(sides, number, color);
     }
 }

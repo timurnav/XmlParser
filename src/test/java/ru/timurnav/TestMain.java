@@ -35,11 +35,11 @@ public class TestMain {
 
     private static final Queue<Shape> EXPECTED_SHAPE_QUEUE = new ConcurrentLinkedQueue<>(
             Arrays.asList(
-                    new Triangle("red", 1, (Arrays.asList(3.1f, 4.2f, 5.3f))),
-                    new Circle("green", 2, 10.123f),
-                    new Rectangle("white", 3, Arrays.asList(1.45f, 1.78f)),
-                    new Square("blue", 4 , 1.5f))
-    );
+                    new Triangle("<triangle><color>red</color><side>3.1</side><side>4.2</side><side>5.3</side></triangle>", 1),
+                    new Circle("<circle><color>green</color><diameter>10.123</diameter></circle>", 2),
+                    new Rectangle("<rectangle><color>white</color><side>1.45</side><side>1.78</side></rectangle>", 3),
+                    new Square("<square><color>blue</color><side>1.5</side></square>", 4)
+    ));
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
