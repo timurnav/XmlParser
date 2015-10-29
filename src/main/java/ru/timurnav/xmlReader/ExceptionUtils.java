@@ -16,7 +16,7 @@ public class ExceptionUtils {
         TAGS_CONTENT("Can't parse xml. The File don't correspond to the schema. To get the reference of " +
                 "the schema launch app without any parameters.\n" +
                 "This case probably one of shapes contains incorrect content."),
-        TAG("Can't split xml. The File don't correspond to the schema. To get the address of " +
+        TAG("Can't split xml. The File doesn't correspond to the schema. To get the address of " +
                 "the schema launch app without any parameters. \nThis case probably there is some syntax mistake:" +
                 "open or close tags of one of the shapes is incorrect or missing."),
         ARGUMENTS("Hi! You've tried to launch this application, but it was aborted.\n" +

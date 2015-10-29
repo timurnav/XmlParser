@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Triangle extends Shape {
 
     @XmlElement(name = "side")
-    private Float side1, side2, side3;
+    private List<Float> sides;
 
     public Triangle() {
     }
@@ -23,16 +23,14 @@ public class Triangle extends Shape {
         super(number);
         Triangle unmarshaled = (Triangle) convertXmlToObject(xmlString, Triangle.class);
         this.color = unmarshaled.color;
-        this.side1 = unmarshaled.side1;
-        this.side2 = unmarshaled.side2;
-        this.side3 = unmarshaled.side3;
+        this.sides = unmarshaled.sides;
     }
 
     protected void validate() {
         Objects.requireNonNull(color);
-        Objects.requireNonNull(side1);
-        Objects.requireNonNull(side2);
-        Objects.requireNonNull(side3);
+        Objects.requireNonNull(sides.get(0));
+        Objects.requireNonNull(sides.get(1));
+        Objects.requireNonNull(sides.get(2));
     }
 
     public Triangle(String xmlString) {
@@ -41,8 +39,11 @@ public class Triangle extends Shape {
 
     @Override
     public double square() {
-        float p = (side1 + side2 + side3) / 2;
-        return Math.sqrt(p * (p - side1) * (p - side2) * (p - side3));
+        float a = sides.get(0);
+        float b = sides.get(1);
+        float c = sides.get(2);
+        float p = (a + b + c) / 2;
+        return Math.sqrt(p * (p - a) * (p - b) * (p - c));
     }
 
     @Override
@@ -50,15 +51,13 @@ public class Triangle extends Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Triangle triangle = (Triangle) o;
-        return Objects.equals(side1, triangle.side1) &&
-                Objects.equals(side2, triangle.side2) &&
-                Objects.equals(side3, triangle.side3) &&
+        return Objects.equals(sides, triangle.sides) &&
                 Objects.equals(number, triangle.number) &&
                 Objects.equals(color, triangle.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(side1, side2, side3, number, color);
+        return Objects.hash(sides, number, color);
     }
 }
