@@ -1,6 +1,7 @@
 package ru.timurnav;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -19,18 +20,27 @@ import java.util.concurrent.TimeUnit;
 
 public class TestMain {
 
-    private static final String EXPECTED_CONSOLE_OUTPUT_MAIN =
-            "1:red - 6,51\n" +
-                    "2:green - 321,94\n" +
-                    "3:white - 2,58\n" +
-                    "4:blue - 2,25\n";
+    private static Queue<String> EXPECTED_STRING_QUEUE;
 
-    private static final Queue<String> EXPECTED_STRING_QUEUE = new ConcurrentLinkedQueue<>(
-            Arrays.asList("<triangle><color>red</color><side>3.1</side><side>4.2</side><side>5.3</side></triangle>",
-                    "<circle><color>green</color><diameter>10.123</diameter></circle>",
-                    "<rectangle><color>white</color><side>1.45</side><side>1.78</side></rectangle>",
-                    "<square><color>blue</color><side>1.5</side></square>")
-    );
+    private static final String EXPECTED_CONSOLE_OUTPUT_MAIN =
+            "1:red - 6,51\r\n" +
+                    "2:green - 321,94\r\n" +
+                    "3:white - 2,58\r\n" +
+                    "4:blue - 2,25\r\n";
+
+    @Before
+    public void setUp() throws Exception {
+        EXPECTED_STRING_QUEUE = new ConcurrentLinkedQueue<>(
+                Arrays.asList("<triangle><color>red</color><side>3.1</side><side>4.2</side><side>5.3</side></triangle>",
+                        "<circle><color>green</color><diameter>10.123</diameter></circle>",
+                        "<rectangle><color>white</color><side>1.45</side><side>1.78</side></rectangle>",
+                        "<square><color>blue</color><side>1.5</side></square>")
+        );
+        while (ParserMain.XML_STRING_QUEUE.size() > 0) {
+            ParserMain.XML_STRING_QUEUE.clear();
+        }
+    }
+
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -59,10 +69,9 @@ public class TestMain {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream consoleStream = System.out;
         System.setOut(new PrintStream(outputStream));
-        Thread thread = new Thread(new XmlParser());
-        thread.setDaemon(true);
-        thread.start();
-        TimeUnit.SECONDS.sleep(5);
+        XmlParser parser = new XmlParser();
+        parser.counter = 4;
+        parser.run();
         System.setOut(consoleStream);
         Assert.assertEquals(EXPECTED_CONSOLE_OUTPUT_MAIN, outputStream.toString());
     }

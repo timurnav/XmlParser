@@ -3,6 +3,7 @@ package ru.timurnav.xmlReader;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -29,14 +30,19 @@ public class ParserMain {
         try {
             Thread splitterThread = new Thread(new XmlSplitter(xmlFile));
             splitterThread.start();
-            Thread parserThread = new Thread(new XmlParser());
-            parserThread.setDaemon(true);
+//            Thread parserThread = new Thread(new XmlParser());
+//            parserThread.setDaemon(true);
+//            parserThread.start();
+//            splitterThread.join();
+//            while (true){
+//                TimeUnit.SECONDS.sleep(1);
+//                if (XML_STRING_QUEUE.size() == 0) break;
+//            }
+            XmlParser parser = new XmlParser();
+            Thread parserThread = new Thread(parser);
             parserThread.start();
             splitterThread.join();
-            while (true){
-                TimeUnit.SECONDS.sleep(5);
-                if (XML_STRING_QUEUE.size() == 0) break;
-            }
+            parser.counter = XML_STRING_QUEUE.size();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

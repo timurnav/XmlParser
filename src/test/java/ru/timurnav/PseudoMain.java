@@ -8,6 +8,6 @@ public class PseudoMain {
 //        Main.main(new String[]{""});
 //        ParserMain.mainParserClass(new String[]{"src/test/resources/shapes_tag_content.xml"});
 //        ParserMain.mainParserClass(new String[]{"src/test/resources/shapes_open_tag.xml"});
-        ParserMain.mainParserClass(new String[]{"src/test/resources/10000shapes.xml"});
+        ParserMain.mainParserClass(new String[]{"src/test/resources/1000shapes.xml"});
     }
 }
