@@ -4,6 +4,7 @@ package ru.timurnav.xmlReader;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.ARGUMENTS;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.XML_FILE;
@@ -32,7 +33,10 @@ public class ParserMain {
             parserThread.setDaemon(true);
             parserThread.start();
             splitterThread.join();
-//            TimeUnit.SECONDS.sleep(2);
+            while (true){
+                TimeUnit.SECONDS.sleep(5);
+                if (XML_STRING_QUEUE.size() == 0) break;
+            }
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

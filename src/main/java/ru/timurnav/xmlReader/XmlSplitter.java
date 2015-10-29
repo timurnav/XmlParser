@@ -1,14 +1,17 @@
 package ru.timurnav.xmlReader;
 
-import javax.xml.stream.XMLEventReader;
+import ru.timurnav.model.ShapeType;
+
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.XMLStreamReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class XmlSplitter implements Runnable{
+import static javax.xml.stream.XMLStreamConstants.*;
+
+public class XmlSplitter implements Runnable {
 
     private final File xmlFile;
 
@@ -18,22 +21,31 @@ public class XmlSplitter implements Runnable{
 
     @Override
     public void run() {
-        parseXmlFile();
+        splitXmlFile();
     }
 
-    public void parseXmlFile() {
+    public void splitXmlFile() {
         try {
             XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLEventReader tempReader = factory.createXMLEventReader(new FileInputStream(xmlFile));
-                    XMLEventReader reader = factory.createFilteredReader(
-                            tempReader, event -> event.getEventType() != 4);
+            XMLStreamReader reader = factory.createFilteredReader(
+                    factory.createXMLStreamReader(new FileInputStream(xmlFile)),
+                    filter -> !filter.isWhiteSpace());
             try {
-                while (reader.hasNext()){
-                    XMLEvent event = reader.peek();
-//                    System.out.println(event.);
-//                    System.out.println("event: " + event);
-//                    System.out.println("type: " + event.getEventType());
-                    reader.nextEvent();
+                while (true) {
+                    reader.next();
+                    if (reader.isStartElement()) {
+                        if (!ShapeType.ROOT_SHAPE.matchEventName(reader.getLocalName())) {
+                            throw ExceptionUtils.getExpetionWithMessage(ExceptionUtils.ExceptionType.TAG);
+                        }
+                        break;
+                    }
+                }
+                while (reader.hasNext()) {
+                    reader.next();
+                    if (reader.isStartElement()) {
+                        ShapeType shapeType = ShapeType.getShapeTypeByOpenTag(reader.getLocalName());
+                        readUntilCloseTagOfShape(shapeType, reader);
+                    }
                 }
             } finally {
                 reader.close();
@@ -41,33 +53,27 @@ public class XmlSplitter implements Runnable{
         } catch (FileNotFoundException | XMLStreamException e) {
             throw ExceptionUtils.getExpetionWithMessage(ExceptionUtils.ExceptionType.XML_FILE);
         }
+    }
 
-
-       /* try (CustomTrimReader reader = new CustomTrimReader(
-                new InputStreamReader(new FileInputStream(xmlFile)))) {
-
-            if (!ROOT_SHAPE.matchOpenTag(reader.readLine())) {
-                throw ExceptionUtils.getExpetionWithMessage(OPEN_ROOT_TAG);
+    private void readUntilCloseTagOfShape(ShapeType shapeType, XMLStreamReader reader) throws XMLStreamException {
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            switch (reader.getEventType()){
+                case CHARACTERS:
+                    sb.append(reader.getText());
+                    break;
+                case START_ELEMENT:
+                    sb.append(String.format("<%s>", reader.getLocalName()));
+                    break;
+                case END_ELEMENT:
+                    sb.append(String.format("</%s>", reader.getLocalName()));
+                    if (shapeType.matchEventName(reader.getLocalName())) {
+                        ParserMain.XML_STRING_QUEUE.offer(sb.toString());
+                        return;
+                    }
+                    break;
             }
-            String currentTag = reader.readAndCheckTag(OPEN_TAG);
-
-            do {
-
-                ShapeType currentShapeType = getShapeTypeByOpenTag(currentTag);
-                StringBuilder sb = new StringBuilder(currentTag);
-
-                while (currentShapeType.mismatchCloseTag(currentTag)){
-                    currentTag = reader.readAndCheckTag(CLOSE_TAG);
-                    sb.append(currentTag);
-                }
-
-                ParserMain.XML_STRING_QUEUE.offer(sb.toString());
-                currentTag = reader.readAndCheckTag(CLOSE_ROOT_TAG);
-
-            } while (ROOT_SHAPE.mismatchCloseTag(currentTag));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+            reader.next();
+        }
     }
 }

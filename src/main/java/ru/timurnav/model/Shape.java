@@ -22,19 +22,23 @@ public abstract class Shape {
 
     public Shape() { }
 
+    protected Shape(int number) {
+        this.number = number;
+    }
+
     protected static Shape convertXmlToObject(String xmlData, Class<? extends Shape> clazz) {
         try {
             JAXBContext context = JAXBContext.newInstance(clazz);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (Shape) unmarshaller.unmarshal(new StringReader(xmlData));
-        } catch (JAXBException e) {
+            Shape shape = (Shape) unmarshaller.unmarshal(new StringReader(xmlData));
+            shape.validate();
+            return shape;
+        } catch (NullPointerException | JAXBException e) {
             throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
         }
     }
 
-    protected Shape(int number) {
-        this.number = number;
-    }
+    protected abstract void validate();
 
     public abstract double square();
 

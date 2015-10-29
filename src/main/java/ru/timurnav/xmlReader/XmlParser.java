@@ -2,26 +2,18 @@ package ru.timurnav.xmlReader;
 
 import ru.timurnav.model.Shape;
 import ru.timurnav.model.ShapeFactory;
+import ru.timurnav.model.ShapeType;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.StringReader;
 
+import static ru.timurnav.model.ShapeType.CIRCLE;
 import static ru.timurnav.model.ShapeType.getShapeTypeByXmlString;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public class XmlParser implements Runnable {
-
-    private Shape convertXmlToObject(String xmlData, Class<? extends Shape> clazz) {
-        try {
-            JAXBContext context = JAXBContext.newInstance(clazz);
-            Unmarshaller unmarshaller = context.createUnmarshaller();
-            return (Shape) unmarshaller.unmarshal(new StringReader(xmlData));
-        } catch (JAXBException e) {
-            throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
-        }
-    }
 
     @Override
     public void run() {

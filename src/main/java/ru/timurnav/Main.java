@@ -8,7 +8,8 @@ public class Main {
         try {
             ParserMain.mainParserClass(args);
         } catch (Exception e) {
-            System.out.println("Unexpected configuration. The application aborted with following message");
+            System.out.println("Unexpected configuration. The application had aborted " +
+                    "before it started to process with following message:");
             System.out.println(e.getMessage());
         }
     }

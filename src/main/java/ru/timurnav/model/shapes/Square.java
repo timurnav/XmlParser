@@ -1,6 +1,7 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -21,11 +22,16 @@ public class Square extends Shape {
         super(number);
         Square unmarshaled = (Square) convertXmlToObject(xmlString, Square.class);
         this.color = unmarshaled.color;
-        this.side= unmarshaled.side;
+        this.side = unmarshaled.side;
     }
 
     public Square(String xmlString) {
         this(xmlString, sequence.incrementAndGet());
+    }
+
+    protected void validate() {
+        Objects.requireNonNull(color);
+        Objects.requireNonNull(side);
     }
 
     @Override

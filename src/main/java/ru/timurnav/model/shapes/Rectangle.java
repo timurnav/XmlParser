@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Rectangle extends Shape {
 
     @XmlElement(name = "side")
-    private List<Float> sides;
+    private Float side1, side2;
 
     public Rectangle() {
     }
@@ -22,7 +22,8 @@ public class Rectangle extends Shape {
         super(number);
         Rectangle unmarshaled = (Rectangle) convertXmlToObject(xmlString, Rectangle.class);
         this.color = unmarshaled.color;
-        this.sides = unmarshaled.sides;
+        this.side1 = unmarshaled.side1;
+        this.side2 = unmarshaled.side2;
     }
 
     public Rectangle(String xmlString) {
@@ -30,8 +31,15 @@ public class Rectangle extends Shape {
     }
 
     @Override
+    protected void validate() {
+        Objects.requireNonNull(color);
+        Objects.requireNonNull(side1);
+        Objects.requireNonNull(side2);
+    }
+
+    @Override
     public double square() {
-        return sides.get(0) * sides.get(1);
+        return side1 * side2;
     }
 
     @Override
@@ -39,13 +47,14 @@ public class Rectangle extends Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rectangle rectangle = (Rectangle) o;
-        return Objects.equals(sides, rectangle.sides) &&
+        return Objects.equals(side1, rectangle.side1) &&
+                Objects.equals(side2, rectangle.side2) &&
                 Objects.equals(number, rectangle.number) &&
                 Objects.equals(color, rectangle.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sides, number, color);
+        return Objects.hash(side1, side2, number, color);
     }
 }

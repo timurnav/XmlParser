@@ -47,7 +47,7 @@ public class TestMain {
     @Test
     public void testSplitterFail() {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(ExceptionUtils.ExceptionType.OPEN_TAG.getMessage() + ExceptionUtils.getAdditionalMessage());
+        thrown.expectMessage(ExceptionUtils.ExceptionType.TAG.getMessage() + ExceptionUtils.getAdditionalMessage());
         new XmlSplitter(new File("src/test/resources/shapes_open_tag.xml")).run();
     }
 

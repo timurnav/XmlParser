@@ -28,7 +28,11 @@ public class Circle extends Shape {
         this(xmlString, sequence.incrementAndGet());
     }
 
-
+    @Override
+    protected void validate() {
+        Objects.requireNonNull(color);
+        Objects.requireNonNull(diameter);
+    }
 
     @Override
     public double square() {
@@ -44,8 +48,7 @@ public class Circle extends Shape {
                 Objects.equals(number, circle.number) &&
                 Objects.equals(color, circle.color);
     }
-
-    @Override
+        @Override
     public int hashCode() {
         return Objects.hash(diameter, number, color);
     }
