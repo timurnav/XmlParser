@@ -14,12 +14,17 @@ import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAG;
 public class ShapeFactory {
 
     public static Shape getShape(ShapeType type, XMLStreamReader reader) throws XMLStreamException {
-        switch (type){
-            case CIRCLE: return new Circle(reader);
-            case RECTANGLE: return new Rectangle(reader);
-            case SQUARE: return new Square(reader);
-            case TRIANGLE: return new Triangle(reader);
-            default: throw new XmlParserException(TAG);
+        switch (type) {
+            case CIRCLE:
+                return new Circle(reader);
+            case RECTANGLE:
+                return new Rectangle(reader);
+            case SQUARE:
+                return new Square(reader);
+            case TRIANGLE:
+                return new Triangle(reader);
+            default:
+                throw new XmlParserException(TAG);
         }
     }
 

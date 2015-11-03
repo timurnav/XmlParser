@@ -8,14 +8,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.LogManager;
 
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.ARGUMENTS;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.XML_FILE;
 
-public class ParserMain {
+public class Processing {
 
     public static final BlockingQueue<Shape> SHAPE_QUEUE = new LinkedBlockingQueue<>();
+    public static volatile AtomicInteger counter = new AtomicInteger(0);
+    public static volatile boolean shotdown = false;
 
     public static void mainParserClass(String[] args) {
         if (args.length == 0) {
@@ -36,23 +39,8 @@ public class ParserMain {
         }
 
         try {
-            Thread splitterThread = new Thread(new XmlParser(xmlFile));
-            splitterThread.start();
-/*
-            Thread parserThread = new Thread(new Printer());
-            parserThread.setDaemon(true);
-            parserThread.start();
-            splitterThread.join();
-            while (true){
-                TimeUnit.SECONDS.sleep(1);
-                if (SHAPE_QUEUE.size() == 0) break;
-            }
-*/
-            Printer parser = new Printer();
-            Thread parserThread = new Thread(parser);
-            parserThread.start();
-            splitterThread.join();
-            parser.counter = SHAPE_QUEUE.size();
+            new Thread(new Parsing(xmlFile)).start();
+            new Thread(new Printing()).start();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

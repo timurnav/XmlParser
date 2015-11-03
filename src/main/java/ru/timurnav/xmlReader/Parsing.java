@@ -15,11 +15,11 @@ import java.io.FileNotFoundException;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAG;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.XML_FILE;
 
-public class XmlParser implements Runnable {
+public class Parsing implements Runnable {
 
     private final File xmlFile;
 
-    public XmlParser(File xmlFile) {
+    public Parsing(File xmlFile) {
         this.xmlFile = xmlFile;
     }
 
@@ -38,7 +38,7 @@ public class XmlParser implements Runnable {
                 while (true) {
                     reader.next();
                     if (reader.isStartElement()) {
-                        if (!ShapeType.ROOT_SHAPE.matchEventName(reader.getLocalName())) {
+                        if (!ShapeType.SHAPES.name().equalsIgnoreCase(reader.getLocalName())) {
                             throw new XmlParserException(TAG);
                         }
                         break;
@@ -47,12 +47,14 @@ public class XmlParser implements Runnable {
                 while (reader.hasNext()) {
                     reader.next();
                     if (reader.isStartElement()) {
-                        ShapeType shapeType = ShapeType.getShapeTypeByEvent(reader.getLocalName());
+                        Processing.counter.incrementAndGet();
+                        ShapeType shapeType = ShapeType.valueOf(reader.getLocalName().toUpperCase());
                         Shape shape = ShapeFactory.getShape(shapeType, reader);
-                        ParserMain.SHAPE_QUEUE.offer(shape);
+                        Processing.SHAPE_QUEUE.offer(shape);
                     }
                 }
             } finally {
+                Processing.shotdown = true;
                 reader.close();
             }
         } catch (FileNotFoundException | XMLStreamException e) {
