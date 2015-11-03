@@ -2,13 +2,14 @@ package ru.timurnav.xmlReader;
 
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.util.XmlParserException;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.ARGUMENTS;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.XML_FILE;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.ARGUMENTS;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.XML_FILE;
 
 public class ParserMain {
 
@@ -16,11 +17,11 @@ public class ParserMain {
 
     public static void mainParserClass(String[] args) {
         if (args.length == 0) {
-            throw ExceptionUtils.getExceptionWithMessage(ARGUMENTS);
+            throw new XmlParserException(ARGUMENTS);
         }
         String fileName = args[0];
         if (!fileName.endsWith(".xml")) {
-            throw ExceptionUtils.getExceptionWithMessage(XML_FILE);
+            throw new XmlParserException(XML_FILE);
         }
         File xmlFile = new File(fileName);
         if (!xmlFile.isFile() || !xmlFile.canRead()) {

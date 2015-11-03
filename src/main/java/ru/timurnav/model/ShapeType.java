@@ -1,10 +1,10 @@
 package ru.timurnav.model;
 
-import ru.timurnav.xmlReader.ExceptionUtils;
+import ru.timurnav.util.XmlParserException;
 
 import java.util.Arrays;
 
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAG;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAG;
 
 public enum ShapeType {
     CIRCLE("circle"),
@@ -28,6 +28,6 @@ public enum ShapeType {
                 .stream()
                 .filter(t -> t.matchEventName(eventName))
                 .findAny()
-                .orElseThrow(() -> ExceptionUtils.getExceptionWithMessage(TAG));
+                .orElseThrow(() -> new XmlParserException(TAG));
     }
 }

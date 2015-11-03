@@ -1,13 +1,13 @@
 package ru.timurnav.model;
 
-import ru.timurnav.xmlReader.ExceptionUtils;
+import ru.timurnav.util.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public abstract class Shape {
 
@@ -27,7 +27,7 @@ public abstract class Shape {
             color = reader.getText();
             if (reader.next() == END_ELEMENT) return;
         }
-        throw ExceptionUtils.getExceptionWithMessage(TAGS_CONTENT);
+        throw new XmlParserException(TAGS_CONTENT);
     }
 
     public abstract double square();

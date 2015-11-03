@@ -1,14 +1,14 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
-import ru.timurnav.xmlReader.ExceptionUtils;
+import ru.timurnav.util.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.Objects;
 
 import static javax.xml.stream.XMLStreamConstants.*;
-import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public class Circle extends Shape {
 
@@ -25,7 +25,7 @@ public class Circle extends Shape {
             diameter = Float.valueOf(reader.getText());
             if (reader.next() == END_ELEMENT) return;
         }
-        throw ExceptionUtils.getExceptionWithMessage(TAGS_CONTENT);
+        throw new XmlParserException(TAGS_CONTENT);
     }
 
     @Override

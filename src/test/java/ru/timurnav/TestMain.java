@@ -2,15 +2,13 @@ package ru.timurnav;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import ru.timurnav.model.Shape;
 import ru.timurnav.model.shapes.Circle;
 import ru.timurnav.model.shapes.Rectangle;
 import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
-import ru.timurnav.xmlReader.ExceptionUtils;
+import ru.timurnav.util.XmlParserException;
 import ru.timurnav.xmlReader.ParserMain;
 import ru.timurnav.xmlReader.Printer;
 import ru.timurnav.xmlReader.XmlParser;
@@ -46,10 +44,6 @@ public class TestMain {
         }
     }
 
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void testSplitter() {
         Assert.assertTrue(ParserMain.SHAPE_QUEUE.isEmpty());
@@ -59,10 +53,8 @@ public class TestMain {
         }
     }
 
-    @Test
+    @Test(expected = XmlParserException.class)
     public void testSplitterFail() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage(ExceptionUtils.ExceptionType.TAG.getMessage() + ExceptionUtils.getAdditionalMessage());
         new XmlParser(new File("src/test/resources/shapes_open_tag.xml")).run();
     }
 
