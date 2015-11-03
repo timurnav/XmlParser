@@ -44,7 +44,7 @@ public class XmlSplitter implements Runnable {
                     reader.next();
                     if (reader.isStartElement()) {
                         ShapeType shapeType = ShapeType.getShapeTypeByEvent(reader.getLocalName());
-                        Shape shape = ShapeFactory.getShape(shapeType, reader);
+                        Shape shape = ShapeFactory.getShape(shapeType,reader);
                         ParserMain.SHAPE_QUEUE.offer(shape);
                     }
                 }

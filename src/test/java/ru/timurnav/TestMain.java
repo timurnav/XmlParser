@@ -38,7 +38,7 @@ public class TestMain {
                 Arrays.asList(
                         new Triangle(1, "red", 3.1f, 4.2f, 5.3f),
                         new Circle(2, "green", 10.123f),
-                        new Rectangle(2, "white", 1.45f, 1.78f),
+                        new Rectangle(3, "white", 1.45f, 1.78f),
                         new Square(4, "blue", 1.5f))
         );
         while (ParserMain.SHAPE_QUEUE.size() > 0) {
