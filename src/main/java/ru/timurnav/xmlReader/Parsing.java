@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAG;
+import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.XML_FILE;
 
 public class Parsing implements Runnable {
@@ -53,6 +54,8 @@ public class Parsing implements Runnable {
                         Processing.SHAPE_QUEUE.offer(shape);
                     }
                 }
+            } catch (IllegalArgumentException e) {
+                throw new XmlParserException(TAGS_CONTENT);
             } finally {
                 Processing.shotdown = true;
                 reader.close();
