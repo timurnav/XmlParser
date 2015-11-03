@@ -5,11 +5,14 @@ import ru.timurnav.util.XmlParserException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.TAGS_CONTENT;
 
 public abstract class Shape {
+
+    protected final Logger log = Logger.getLogger(getClass().getName());
 
     protected final static AtomicInteger sequence = new AtomicInteger(0);
 
@@ -23,6 +26,7 @@ public abstract class Shape {
 
     protected Shape(XMLStreamReader reader) throws XMLStreamException {
         number = sequence.incrementAndGet();
+        log.info(String.format("creating %s with number %d", reader.getLocalName(), number));
         if (reader.next() == START_ELEMENT && reader.next() == CHARACTERS) {
             color = reader.getText();
             if (reader.next() == END_ELEMENT) return;

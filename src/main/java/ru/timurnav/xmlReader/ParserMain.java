@@ -5,8 +5,10 @@ import ru.timurnav.model.Shape;
 import ru.timurnav.util.XmlParserException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.LogManager;
 
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.ARGUMENTS;
 import static ru.timurnav.util.ExceptionUtils.ExceptionType.XML_FILE;
@@ -25,7 +27,12 @@ public class ParserMain {
         }
         File xmlFile = new File(fileName);
         if (!xmlFile.isFile() || !xmlFile.canRead()) {
-            throw new IllegalArgumentException("Can not read file");
+            throw new XmlParserException(ARGUMENTS);
+        }
+        try(FileInputStream fis = new FileInputStream("src/main/java/ru/timurnav/logging.properties")) {
+            LogManager.getLogManager().readConfiguration(fis);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
