@@ -1,6 +1,8 @@
 package ru.timurnav.xmlReader;
 
 
+import ru.timurnav.model.Shape;
+
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Exchanger;
@@ -12,7 +14,7 @@ import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.XML_FILE;
 
 public class ParserMain {
 
-    public static final BlockingQueue<String> XML_STRING_QUEUE = new LinkedBlockingQueue<>();
+    public static final BlockingQueue<Shape> SHAPE_QUEUE = new LinkedBlockingQueue<>();
 
     public static void mainParserClass(String[] args) {
         if (args.length == 0) {
@@ -30,19 +32,21 @@ public class ParserMain {
         try {
             Thread splitterThread = new Thread(new XmlSplitter(xmlFile));
             splitterThread.start();
-//            Thread parserThread = new Thread(new XmlParser());
-//            parserThread.setDaemon(true);
-//            parserThread.start();
-//            splitterThread.join();
-//            while (true){
-//                TimeUnit.SECONDS.sleep(1);
-//                if (XML_STRING_QUEUE.size() == 0) break;
-//            }
+/*
+            Thread parserThread = new Thread(new XmlParser());
+            parserThread.setDaemon(true);
+            parserThread.start();
+            splitterThread.join();
+            while (true){
+                TimeUnit.SECONDS.sleep(1);
+                if (SHAPE_QUEUE.size() == 0) break;
+            }
+*/
             XmlParser parser = new XmlParser();
             Thread parserThread = new Thread(parser);
             parserThread.start();
             splitterThread.join();
-            parser.counter = XML_STRING_QUEUE.size();
+            parser.counter = SHAPE_QUEUE.size();
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }

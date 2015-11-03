@@ -1,9 +1,6 @@
 package ru.timurnav.xmlReader;
 
 import ru.timurnav.model.Shape;
-import ru.timurnav.model.ShapeFactory;
-
-import static ru.timurnav.model.ShapeType.getShapeTypeByXmlString;
 
 public class XmlParser implements Runnable {
 
@@ -13,12 +10,11 @@ public class XmlParser implements Runnable {
     public void run() {
         try {
             while (true) {
-                if (counter != -1){
+                if (counter != -1) {
                     if (counter == 0) break;
                     counter--;
                 }
-                String xmlString = ParserMain.XML_STRING_QUEUE.take();
-                Shape shape = ShapeFactory.getShape(getShapeTypeByXmlString(xmlString), xmlString);
+                Shape shape = ParserMain.SHAPE_QUEUE.take();
                 System.out.println(shape);
             }
         } catch (InterruptedException e) {

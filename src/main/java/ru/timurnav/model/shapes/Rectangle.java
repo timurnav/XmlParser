@@ -1,44 +1,43 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import java.util.List;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.util.Objects;
 
-@XmlType(name = "rectangle")
-@XmlRootElement
+import static javax.xml.stream.XMLStreamConstants.*;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+
 public class Rectangle extends Shape {
 
-    @XmlElement(name = "side")
-    private List<Float> sides;
+    private Float side1;
+    private Float side2;
 
-    public Rectangle() {
+    public Rectangle(int number, String color, Float side1, Float side2) {
+        super(number, color);
+        this.side1 = side1;
+        this.side2 = side2;
     }
 
-    public Rectangle(String xmlString, int number) {
-        super(number);
-        Rectangle unmarshaled = (Rectangle) convertXmlToObject(xmlString, Rectangle.class);
-        this.color = unmarshaled.color;
-        this.sides = unmarshaled.sides;
-    }
-
-    public Rectangle(String xmlString) {
-        this(xmlString, sequence.incrementAndGet());
-    }
-
-    @Override
-    protected void validate() {
-        Objects.requireNonNull(color);
-        Objects.requireNonNull(sides.get(0));
-        Objects.requireNonNull(sides.get(1));
+    public Rectangle(XMLStreamReader reader) throws XMLStreamException {
+        super(reader);
+        if (reader.next() == START_ELEMENT && reader.next() == CHARACTERS) {
+            side1 = Float.valueOf(reader.getText());
+            if (reader.next() == END_ELEMENT) {
+                if (reader.next() == START_ELEMENT && reader.next() == CHARACTERS) {
+                    side2 = Float.valueOf(reader.getText());
+                    if (reader.next() == END_ELEMENT) return;
+                }
+            }
+        }
+        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
     }
 
     @Override
     public double square() {
-        return sides.get(0) * sides.get(1);
+        return side1 * side2;
     }
 
     @Override
@@ -46,13 +45,14 @@ public class Rectangle extends Shape {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rectangle rectangle = (Rectangle) o;
-        return Objects.equals(sides, rectangle.sides) &&
+        return Objects.equals(side1, rectangle.side1) &&
+                Objects.equals(side2, rectangle.side2) &&
                 Objects.equals(number, rectangle.number) &&
                 Objects.equals(color, rectangle.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sides, number, color);
+        return Objects.hash(side1, side2, number, color);
     }
 }

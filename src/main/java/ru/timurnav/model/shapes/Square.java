@@ -3,35 +3,29 @@ package ru.timurnav.model.shapes;
 import ru.timurnav.model.Shape;
 import ru.timurnav.xmlReader.ExceptionUtils;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.util.Objects;
 
-@XmlType(name = "square")
-@XmlRootElement
+import static javax.xml.stream.XMLStreamConstants.*;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+
 public class Square extends Shape {
 
-    @XmlElement(name = "side")
     private float side;
 
-    public Square() {
+    public Square(int number, String color, float side) {
+        super(number, color);
+        this.side = side;
     }
 
-    public Square(String xmlString, int number) {
-        super(number);
-        Square unmarshaled = (Square) convertXmlToObject(xmlString, Square.class);
-        this.color = unmarshaled.color;
-        this.side = unmarshaled.side;
-    }
-
-    public Square(String xmlString) {
-        this(xmlString, sequence.incrementAndGet());
-    }
-
-    protected void validate() {
-        Objects.requireNonNull(color);
-        Objects.requireNonNull(side);
+    public Square(XMLStreamReader reader) throws XMLStreamException {
+        super(reader);
+        if (reader.next() == START_ELEMENT && reader.next() == CHARACTERS) {
+            side = Float.valueOf(reader.getText());
+            if (reader.next() == END_ELEMENT) return;
+        }
+        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
     }
 
     @Override

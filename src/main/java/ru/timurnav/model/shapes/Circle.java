@@ -1,37 +1,31 @@
 package ru.timurnav.model.shapes;
 
 import ru.timurnav.model.Shape;
+import ru.timurnav.xmlReader.ExceptionUtils;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.util.Objects;
 
-@XmlType(name = "circle")
-@XmlRootElement
+import static javax.xml.stream.XMLStreamConstants.*;
+import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.TAGS_CONTENT;
+
 public class Circle extends Shape {
 
-    @XmlElement(name = "diameter")
     private float diameter;
 
-    public Circle() {
+    public Circle(int number, String color, float diameter) {
+        super(number, color);
+        this.diameter = diameter;
     }
 
-    public Circle(String xmlString, int number) {
-        super(number);
-        Circle unmarshaled = (Circle) convertXmlToObject(xmlString, Circle.class);
-        this.color = unmarshaled.color;
-        this.diameter= unmarshaled.diameter;
-    }
-
-    public Circle(String xmlString) {
-        this(xmlString, sequence.incrementAndGet());
-    }
-
-    @Override
-    protected void validate() {
-        Objects.requireNonNull(color);
-        Objects.requireNonNull(diameter);
+    public Circle(XMLStreamReader reader) throws XMLStreamException {
+        super(reader);
+        if (reader.next() == START_ELEMENT && reader.next() == CHARACTERS) {
+            diameter = Float.valueOf(reader.getText());
+            if (reader.next() == END_ELEMENT) return;
+        }
+        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
     }
 
     @Override
@@ -48,7 +42,8 @@ public class Circle extends Shape {
                 Objects.equals(number, circle.number) &&
                 Objects.equals(color, circle.color);
     }
-        @Override
+
+    @Override
     public int hashCode() {
         return Objects.hash(diameter, number, color);
     }

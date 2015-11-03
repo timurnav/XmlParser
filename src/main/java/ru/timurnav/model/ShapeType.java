@@ -23,16 +23,11 @@ public enum ShapeType {
         return this.eventName.equals(eventName);
     }
 
-    public static ShapeType getShapeTypeByOpenTag(String eventName) {
+    public static ShapeType getShapeTypeByEvent(String eventName) {
         return Arrays.asList(ShapeType.values())
                 .stream()
                 .filter(t -> t.matchEventName(eventName))
                 .findAny()
                 .orElseThrow(() -> ExceptionUtils.getExpetionWithMessage(TAG));
-    }
-
-    public static ShapeType getShapeTypeByXmlString(String xmlString) {
-        String tmp = xmlString.substring(xmlString.indexOf("<") + 1, xmlString.indexOf(">"));
-        return getShapeTypeByOpenTag(tmp);
     }
 }

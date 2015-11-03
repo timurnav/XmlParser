@@ -5,6 +5,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import ru.timurnav.model.Shape;
+import ru.timurnav.model.shapes.Circle;
+import ru.timurnav.model.shapes.Rectangle;
+import ru.timurnav.model.shapes.Square;
+import ru.timurnav.model.shapes.Triangle;
 import ru.timurnav.xmlReader.ExceptionUtils;
 import ru.timurnav.xmlReader.ParserMain;
 import ru.timurnav.xmlReader.XmlParser;
@@ -16,11 +21,10 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 
 public class TestMain {
 
-    private static Queue<String> EXPECTED_STRING_QUEUE;
+    private static Queue<Shape> EXPECTED_SHAPE_QUEUE;
 
     private static final String EXPECTED_CONSOLE_OUTPUT_MAIN =
             "1:red - 6,51\r\n" +
@@ -30,14 +34,15 @@ public class TestMain {
 
     @Before
     public void setUp() throws Exception {
-        EXPECTED_STRING_QUEUE = new ConcurrentLinkedQueue<>(
-                Arrays.asList("<triangle><color>red</color><side>3.1</side><side>4.2</side><side>5.3</side></triangle>",
-                        "<circle><color>green</color><diameter>10.123</diameter></circle>",
-                        "<rectangle><color>white</color><side>1.45</side><side>1.78</side></rectangle>",
-                        "<square><color>blue</color><side>1.5</side></square>")
+        EXPECTED_SHAPE_QUEUE = new ConcurrentLinkedQueue<>(
+                Arrays.asList(
+                        new Triangle(1, "red", 3.1f, 4.2f, 5.3f),
+                        new Circle(2, "green", 10.123f),
+                        new Rectangle(2, "white", 1.45f, 1.78f),
+                        new Square(4, "blue", 1.5f))
         );
-        while (ParserMain.XML_STRING_QUEUE.size() > 0) {
-            ParserMain.XML_STRING_QUEUE.clear();
+        while (ParserMain.SHAPE_QUEUE.size() > 0) {
+            ParserMain.SHAPE_QUEUE.clear();
         }
     }
 
@@ -47,10 +52,10 @@ public class TestMain {
 
     @Test
     public void testSplitter() {
-        Assert.assertTrue(ParserMain.XML_STRING_QUEUE.isEmpty());
+        Assert.assertTrue(ParserMain.SHAPE_QUEUE.isEmpty());
         new XmlSplitter(new File("src/test/resources/shapes1.xml")).run();
-        while (EXPECTED_STRING_QUEUE.size() > 0) {
-            Assert.assertEquals(EXPECTED_STRING_QUEUE.poll(), ParserMain.XML_STRING_QUEUE.poll());
+        while (EXPECTED_SHAPE_QUEUE.size() > 0) {
+            Assert.assertEquals(EXPECTED_SHAPE_QUEUE.poll(), ParserMain.SHAPE_QUEUE.poll());
         }
     }
 
@@ -63,8 +68,8 @@ public class TestMain {
 
     @Test
     public void testParser() throws InterruptedException {
-        while (EXPECTED_STRING_QUEUE.size() > 0) {
-            ParserMain.XML_STRING_QUEUE.offer(EXPECTED_STRING_QUEUE.poll());
+        while (EXPECTED_SHAPE_QUEUE.size() > 0) {
+            ParserMain.SHAPE_QUEUE.offer(EXPECTED_SHAPE_QUEUE.poll());
         }
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream consoleStream = System.out;

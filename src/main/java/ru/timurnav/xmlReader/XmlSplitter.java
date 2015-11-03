@@ -1,5 +1,7 @@
 package ru.timurnav.xmlReader;
 
+import ru.timurnav.model.Shape;
+import ru.timurnav.model.ShapeFactory;
 import ru.timurnav.model.ShapeType;
 
 import javax.xml.stream.XMLInputFactory;
@@ -8,8 +10,6 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
-import static javax.xml.stream.XMLStreamConstants.*;
 
 public class XmlSplitter implements Runnable {
 
@@ -43,8 +43,9 @@ public class XmlSplitter implements Runnable {
                 while (reader.hasNext()) {
                     reader.next();
                     if (reader.isStartElement()) {
-                        ShapeType shapeType = ShapeType.getShapeTypeByOpenTag(reader.getLocalName());
-                        readUntilCloseTagOfShape(shapeType, reader);
+                        ShapeType shapeType = ShapeType.getShapeTypeByEvent(reader.getLocalName());
+                        Shape shape = ShapeFactory.getShape(shapeType, reader);
+                        ParserMain.SHAPE_QUEUE.offer(shape);
                     }
                 }
             } finally {
@@ -52,28 +53,6 @@ public class XmlSplitter implements Runnable {
             }
         } catch (FileNotFoundException | XMLStreamException e) {
             throw ExceptionUtils.getExpetionWithMessage(ExceptionUtils.ExceptionType.XML_FILE);
-        }
-    }
-
-    private void readUntilCloseTagOfShape(ShapeType shapeType, XMLStreamReader reader) throws XMLStreamException {
-        StringBuilder sb = new StringBuilder();
-        while (true) {
-            switch (reader.getEventType()){
-                case CHARACTERS:
-                    sb.append(reader.getText());
-                    break;
-                case START_ELEMENT:
-                    sb.append(String.format("<%s>", reader.getLocalName()));
-                    break;
-                case END_ELEMENT:
-                    sb.append(String.format("</%s>", reader.getLocalName()));
-                    if (shapeType.matchEventName(reader.getLocalName())) {
-                        ParserMain.XML_STRING_QUEUE.offer(sb.toString());
-                        return;
-                    }
-                    break;
-            }
-            reader.next();
         }
     }
 }
