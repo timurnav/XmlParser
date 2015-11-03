@@ -2,7 +2,7 @@ package ru.timurnav.xmlReader;
 
 public class ExceptionUtils {
 
-    public static IllegalArgumentException getExpetionWithMessage(ExceptionType exceptionType) throws RuntimeException {
+    public static IllegalArgumentException getExceptionWithMessage(ExceptionType exceptionType) throws RuntimeException {
         return new IllegalArgumentException(exceptionType.message + additionalMessage);
     }
 

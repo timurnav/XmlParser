@@ -27,7 +27,7 @@ public abstract class Shape {
             color = reader.getText();
             if (reader.next() == END_ELEMENT) return;
         }
-        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
+        throw ExceptionUtils.getExceptionWithMessage(TAGS_CONTENT);
     }
 
     public abstract double square();

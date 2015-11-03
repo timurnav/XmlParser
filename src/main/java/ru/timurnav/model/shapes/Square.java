@@ -25,7 +25,7 @@ public class Square extends Shape {
             side = Float.valueOf(reader.getText());
             if (reader.next() == END_ELEMENT) return;
         }
-        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
+        throw ExceptionUtils.getExceptionWithMessage(TAGS_CONTENT);
     }
 
     @Override

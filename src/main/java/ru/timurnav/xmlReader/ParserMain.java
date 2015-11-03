@@ -5,9 +5,7 @@ import ru.timurnav.model.Shape;
 
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Exchanger;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.ARGUMENTS;
 import static ru.timurnav.xmlReader.ExceptionUtils.ExceptionType.XML_FILE;
@@ -18,11 +16,11 @@ public class ParserMain {
 
     public static void mainParserClass(String[] args) {
         if (args.length == 0) {
-            throw ExceptionUtils.getExpetionWithMessage(ARGUMENTS);
+            throw ExceptionUtils.getExceptionWithMessage(ARGUMENTS);
         }
         String fileName = args[0];
-        if (!fileName.endsWith(".xml")){
-            throw ExceptionUtils.getExpetionWithMessage(XML_FILE);
+        if (!fileName.endsWith(".xml")) {
+            throw ExceptionUtils.getExceptionWithMessage(XML_FILE);
         }
         File xmlFile = new File(fileName);
         if (!xmlFile.isFile() || !xmlFile.canRead()) {
@@ -30,10 +28,10 @@ public class ParserMain {
         }
 
         try {
-            Thread splitterThread = new Thread(new XmlSplitter(xmlFile));
+            Thread splitterThread = new Thread(new XmlParser(xmlFile));
             splitterThread.start();
 /*
-            Thread parserThread = new Thread(new XmlParser());
+            Thread parserThread = new Thread(new Printer());
             parserThread.setDaemon(true);
             parserThread.start();
             splitterThread.join();
@@ -42,7 +40,7 @@ public class ParserMain {
                 if (SHAPE_QUEUE.size() == 0) break;
             }
 */
-            XmlParser parser = new XmlParser();
+            Printer parser = new Printer();
             Thread parserThread = new Thread(parser);
             parserThread.start();
             splitterThread.join();

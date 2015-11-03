@@ -28,6 +28,6 @@ public enum ShapeType {
                 .stream()
                 .filter(t -> t.matchEventName(eventName))
                 .findAny()
-                .orElseThrow(() -> ExceptionUtils.getExpetionWithMessage(TAG));
+                .orElseThrow(() -> ExceptionUtils.getExceptionWithMessage(TAG));
     }
 }

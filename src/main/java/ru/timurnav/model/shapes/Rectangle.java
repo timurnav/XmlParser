@@ -32,7 +32,7 @@ public class Rectangle extends Shape {
                 }
             }
         }
-        throw ExceptionUtils.getExpetionWithMessage(TAGS_CONTENT);
+        throw ExceptionUtils.getExceptionWithMessage(TAGS_CONTENT);
     }
 
     @Override

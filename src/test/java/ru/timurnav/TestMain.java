@@ -12,8 +12,8 @@ import ru.timurnav.model.shapes.Square;
 import ru.timurnav.model.shapes.Triangle;
 import ru.timurnav.xmlReader.ExceptionUtils;
 import ru.timurnav.xmlReader.ParserMain;
+import ru.timurnav.xmlReader.Printer;
 import ru.timurnav.xmlReader.XmlParser;
-import ru.timurnav.xmlReader.XmlSplitter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,7 +53,7 @@ public class TestMain {
     @Test
     public void testSplitter() {
         Assert.assertTrue(ParserMain.SHAPE_QUEUE.isEmpty());
-        new XmlSplitter(new File("src/test/resources/shapes1.xml")).run();
+        new XmlParser(new File("src/test/resources/shapes1.xml")).run();
         while (EXPECTED_SHAPE_QUEUE.size() > 0) {
             Assert.assertEquals(EXPECTED_SHAPE_QUEUE.poll(), ParserMain.SHAPE_QUEUE.poll());
         }
@@ -63,7 +63,7 @@ public class TestMain {
     public void testSplitterFail() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage(ExceptionUtils.ExceptionType.TAG.getMessage() + ExceptionUtils.getAdditionalMessage());
-        new XmlSplitter(new File("src/test/resources/shapes_open_tag.xml")).run();
+        new XmlParser(new File("src/test/resources/shapes_open_tag.xml")).run();
     }
 
     @Test
@@ -74,9 +74,9 @@ public class TestMain {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         PrintStream consoleStream = System.out;
         System.setOut(new PrintStream(outputStream));
-        XmlParser parser = new XmlParser();
-        parser.counter = 4;
-        parser.run();
+        Printer printer = new Printer();
+        printer.counter = 4;
+        printer.run();
         System.setOut(consoleStream);
         Assert.assertEquals(EXPECTED_CONSOLE_OUTPUT_MAIN, outputStream.toString());
     }

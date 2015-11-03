@@ -17,7 +17,7 @@ public class ShapeFactory {
             case RECTANGLE: return new Rectangle(reader);
             case SQUARE: return new Square(reader);
             case TRIANGLE: return new Triangle(reader);
-            default: throw ExceptionUtils.getExpetionWithMessage(ExceptionUtils.ExceptionType.TAG);
+            default: throw ExceptionUtils.getExceptionWithMessage(ExceptionUtils.ExceptionType.TAG);
         }
     }
 
